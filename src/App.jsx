@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import TodoCard from './TodoCard';
 import { Container, Button, Form, Dropdown, Card, Row, Col } from 'react-bootstrap';
+<<<<<<< HEAD
 
 function App() {
   const [todos, setTodos] = useState([]);
@@ -22,11 +23,15 @@ function App() {
     setTaskName('');
     setTaskDescription('');
   };
+=======
+import Card from './assets/card';
+>>>>>>> 9335497a8840646652c5c8d7c8c658ef8ecfa1f2
 
   const handleDelete = (id) => {
     setTodos(todos.filter(todo => todo.id !== id));
   };
 
+<<<<<<< HEAD
   const handleEdit = (id, newName, newDescription) => {
     setTodos(
       todos.map(todo =>
@@ -96,6 +101,13 @@ function App() {
           </Col>
         ))}
       </Row>
+=======
+function App() {
+  
+  return (
+    <Container>
+     <Card></Card>
+>>>>>>> 9335497a8840646652c5c8d7c8c658ef8ecfa1f2
     </Container>
   );
 }
