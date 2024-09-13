@@ -1,154 +1,103 @@
+import React, { useState } from 'react';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import TodoCard from './TodoCard';
+import { Container, Button, Form, Dropdown, Card, Row, Col } from 'react-bootstrap';
 
-import "bootstrap/dist/css/bootstrap.min.css"
-import Card from "./Card"
-import './App.css'
+function App() {
+  const [todos, setTodos] = useState([]);
+  const [filter, setFilter] = useState('all');
+  const [taskName, setTaskName] = useState('');
+  const [taskDescription, setTaskDescription] = useState('');
+  
+  const handleAddTodo = () => {
+    setTodos([
+      ...todos,
+      {
+        id: Date.now(),
+        name: taskName,
+        description: taskDescription,
+        status: 'not completed'
+      }
+    ]);
+    setTaskName('');
+    setTaskDescription('');
+  };
 
+  const handleDelete = (id) => {
+    setTodos(todos.filter(todo => todo.id !== id));
+  };
 
-function App()
+  const handleEdit = (id, newName, newDescription) => {
+    setTodos(
+      todos.map(todo =>
+        todo.id === id
+          ? { ...todo, name: newName, description: newDescription }
+          : todo
+      )
+    );
+  };
 
-{
-  const cards= [
-    {
-      plan : "FREE" ,
-      price : 0,
-      features : [
-    {
-       name :"Single User",
-       enable : true
-    },
-       {
-        name :"50GB Storage",
-        enable : true
-    },
-    { 
-       name :"Unlimited Public Projects",
-       enable : true
-    },
-    {  
-      name :"Community Access",
-      enable : true
-    },
-       
-    {
-      name :"Unlimited Private Projects",
-      enable : false
-    },
-    {
-       name :"Dedicated Phone Support",
-       enable : false
-    },
-    {
-      name :"Dedicated Phone Support",
-      enable : false
-   },
-    {
-        name :"Free Subdomain",
-        enable : false
-    },
-    {
-       name :"Monthly Status Reports",
-       enable : false
-    }
-      ]
-    
-    },
-    {
-      plan : "PLUS" ,
-      price : 9,
-      features : [
-    {
-       name :"5 Users",
-       enable : true
-    },
-       {
-        name :"50GB Storage",
-        enable : true
-    },
-    { 
-       name :"Unlimited Public Projects",
-       enable : true
-    },
-    {  
-      name :"Community Access",
-      enable : true
-    },
-       
-    {
-      name :"Unlimited Private Projects",
-      enable : true
-      
-    },
-    {
-       name :"Dedicated Phone Support",
-       enable : true
-    },
-    {
-        name :"Free Subdomain",
-        enable : true
-    },
-    {
-       name :"Monthly Status Reports",
-       enable : false
-    }
-      ]
-    
-    },
-    {
-      plan : "PRO" ,
-      price : 49,
-      features : [
-    {
-       name :"Unlimited Users",
-       enable : true
-    },
-       {
-        name :"50GB Storage",
-        enable : true
-    },
-    { 
-       name :"Unlimited Public Projects",
-       enable : true
-    },
-    {  
-      name :"Community Access",
-      enable : true
-    },
-       
-    {
-      name :"Unlimited Private Projects",
-      enable : true 
-    },
-    {
-       name :"Dedicated Phone Support",
-       enable : true
-    },
-    {
-        name :"Free Subdomain",
-        enable : true
-    },
-    {
-       name :"Monthly Status Reports",
-       enable : true
-    }
-      ]
-    
-    }
-  ];
+  const handleStatusChange = (id, newStatus) => {
+    setTodos(
+      todos.map(todo =>
+        todo.id === id ? { ...todo, status: newStatus } : todo
+      )
+    );
+  };
+
+  const filteredTodos = todos.filter(todo => 
+    filter === 'all' || filter === todo.status
+  );
+
   return (
-    <div className="container">
+    <Container>
+      <h1 className="my-4">Todo App</h1>
+      <Form className="mb-4">
+        <Form.Group controlId="taskName">
+          <Form.Label>Task Name</Form.Label>
+          <Form.Control 
+            type="text" 
+            placeholder="Enter task name" 
+            value={taskName}
+            onChange={(e) => setTaskName(e.target.value)}
+          />
+        </Form.Group>
+        <Form.Group controlId="taskDescription">
+          <Form.Label>Task Description</Form.Label>
+          <Form.Control 
+            type="text" 
+            placeholder="Enter task description" 
+            value={taskDescription}
+            onChange={(e) => setTaskDescription(e.target.value)}
+          />
+        </Form.Group>
 
-      <main>
-        <div className="row row-cols-1 row-cols-md-3 mb-3 text-center">
-         {
-          cards.map((card,index) =>{
-            return <Card key={index} card={card}/>
-          })
-         }
-        </div>
-      </main>
-    </div>
-  )
-
+        <Button variant="primary" onClick={handleAddTodo}>Add Todo</Button>
+      </Form>
+      <Dropdown className="mb-4">
+        <Dropdown.Toggle variant="success" id="dropdown-basic">
+          Filter: {filter === 'all' ? 'All' : filter}
+        </Dropdown.Toggle>
+        <Dropdown.Menu>
+          <Dropdown.Item onClick={() => setFilter('all')}>All</Dropdown.Item>
+          <Dropdown.Item onClick={() => setFilter('completed')}>Completed</Dropdown.Item>
+          <Dropdown.Item onClick={() => setFilter('not completed')}>Not Completed</Dropdown.Item>
+        </Dropdown.Menu>
+      </Dropdown>
+      <Row>
+        {filteredTodos.map(todo => (
+          <Col key={todo.id} sm={12} md={6} lg={4} className="mb-3">
+            <TodoCard
+              todo={todo}
+              onDelete={handleDelete}
+              onEdit={handleEdit}
+              onStatusChange={handleStatusChange}
+            />
+          </Col>
+        ))}
+      </Row>
+    </Container>
+  );
 }
 
-export default App
+export default App;

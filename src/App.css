@@ -1,10 +1,26 @@
-body{
-    background: blue;
+.colo{
+    background: bisque;
 }
-.container {
-    height: 100%;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
+
+.cardds{
+    gap: 40px
+
+}
+
+.container{
+    margin-right : 10px;
+   
+}
+.headd{
+    margin-bottom: 60px;
+}
+.bgg{
+    
+    background-image: url(https://i.pinimg.com/originals/22/32/56/2232569a40bb81133e7e234fa8f910a8.jpg);
+}
+.cardtext{
+    text-align: center;
+}
+.conti{
+     
+}
